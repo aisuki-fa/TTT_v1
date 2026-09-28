@@ -27,6 +27,3 @@ void postModePicked(int mode){
     }
 }
 
-void startGame(mode){
-
-}
