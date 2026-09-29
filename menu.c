@@ -1,3 +1,6 @@
+#include "menu.h"
+#include "stdio.h"
+
 int showUrself(){
     printf("TIC-TAC-TOE\n");
     printf("1. Player vs. Player\n2. Player vs. AI1\n3. Player vs. AI2\n4. Player vs. AI3\n");

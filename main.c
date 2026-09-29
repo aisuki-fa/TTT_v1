@@ -4,12 +4,14 @@
 #include "board.h"
 
 void postModePicked(int mode);
-void startGame(int mode);
 
 int main(){
     int mode = showUrself();
     postModePicked(mode);
-    startGame(mode);
+    char board[3][3];
+    // createBoard(board);
+    // showBoard(board);
+    startGame(mode, board);
     return 0;
 }
 

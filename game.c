@@ -1,7 +1,11 @@
-#define WIN 1
+#include "game.h"
+#include "stdio.h"
+#include "board.h"
 
-void startGame(int mode){
-    char board[3][3];
+#define WIN 1
+#define DRAW 2
+
+void startGame(int mode, char board[3][3]){
     createBoard(board);
     showBoard(board);
     if(mode==1){
@@ -41,27 +45,28 @@ int playerMove(){
     
 }
 
-void validMoveInput(char board[3][3], int index, char token){
-    int count = 0;
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 3; j++){
-            if(board[i][j] != ' '){
-                count++;
-            }
-        }
-    }
-    if(count == 9) return; 
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 3; j++){
-            if(index == ((i * 3) + j)){
-                if(board[i][j] != ' '){
-                    printf("Invalid move. Try again.\n");
-                    index = playerMove();
-                    validMoveInput(board, index, token);
-                }
-            }
-        }
-    }
+int validMoveInput(char board[3][3], int index){
+    // int count = 0;
+    // for(int i = 0; i < 3; i++){
+    //     for(int j = 0; j < 3; j++){
+    //         if(board[i][j] != ' '){
+    //             count++;
+    //         }
+    //     }
+    // }
+    // if(count == 9) return; 
+    // for(int i = 0; i < 3; i++){
+    //     for(int j = 0; j < 3; j++){
+    //         if(index == ((i * 3) + j)){
+    //             if(board[i][j] != ' '){
+    //                 printf("Invalid move. Try again.\n");
+    //                 index = playerMove();
+    //                 validMoveInput(board, index, token);
+    //             }
+    //         }
+    //     }
+    // }
+    return board[index/3][index%3] == ' ';
 }
 
 void puttingInput(char board[3][3], int index, char token){
@@ -74,7 +79,7 @@ void puttingInput(char board[3][3], int index, char token){
     }
 }
 
-void gameOver(char board[3][3], char token1, char token2){
+int gameOver(char board[3][3], char token1, char token2){
     int flag = 0;
     // Row-wise check
     for(int i = 0; i < 3; i++){
@@ -120,7 +125,7 @@ void gameOver(char board[3][3], char token1, char token2){
         }
     }
     // Lagging diagonal check
-    if(board[0][0]!=' ' && board[0][2]==board[1][1] && board[1][1]==board[2][0]){
+    if(board[0][2]!=' ' && board[0][2]==board[1][1] && board[1][1]==board[2][0]){
         flag = WIN;
         if(flag){
             if(board[0][0] == token1){
@@ -141,21 +146,39 @@ void gameOver(char board[3][3], char token1, char token2){
         }
     }
     if(count == 9 && !flag){
+        flag = DRAW;
         printf("No one won. It is a draw.\n");
     }
 
+    return flag;
 }
 
 void playerVsPlayer(char board[3][3]){
-    int index1 = playerMove();
-    char token1 = 'X';
-    validMoveInput(board,index1,token1);
-    puttingInput(board, index1, token1);
+    while(1){
+        char token1 = 'X';
+        char token2 = 'O';
 
-    int index2 = playerMove();
-    char token2 = 'O';
-    validMoveInput(board,index2,token2);
-    puttingInput(board, index2, token2); 
+        int index1;
+        do{
+            index1 = playerMove();
+        }while(!validMoveInput(board,index1));
+        puttingInput(board, index1, token1);
+        showBoard(board);
+        if(gameOver(board, token1, token2)){
+            break;
+        }
+        
+        int index2;
+        do{
+            index2 = playerMove();
+        }while(!validMoveInput(board,index2));
+        puttingInput(board, index2, token2);
+        showBoard(board);
+
+        if(gameOver(board, token1, token2)){
+            break;
+        }
+    } 
 }
 
 void playerVsAI1(char board[3][3]){
