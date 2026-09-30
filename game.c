@@ -1,6 +1,7 @@
 #include "game.h"
 #include "stdio.h"
 #include "board.h"
+#include <stdlib.h>
 
 #define WIN 1
 #define DRAW 2
@@ -182,7 +183,31 @@ void playerVsPlayer(char board[3][3]){
 }
 
 void playerVsAI1(char board[3][3]){
-    
+    while(1){
+        char token1 = 'X';
+        char token2 = 'O';
+
+        int index1;
+        do{
+            index1 = playerMove();
+        }while(!validMoveInput(board,index1));
+        puttingInput(board, index1, token1);
+        showBoard(board);
+        if(gameOver(board, token1, token2)){
+            break;
+        }
+        
+        int index2;
+        do{
+            index2 = rand() % 9;
+        }while(!validMoveInput(board,index2));
+        puttingInput(board, index2, token2);
+        showBoard(board);
+
+        if(gameOver(board, token1, token2)){
+            break;
+        }
+    } 
 }
 
 void playerVsAI2(char board[3][3]){
