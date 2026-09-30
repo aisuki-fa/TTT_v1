@@ -6,6 +6,8 @@
 #define WIN 1
 #define DRAW 2
 
+int number = 43;
+
 void startGame(int mode, char board[3][3]){
     createBoard(board);
     showBoard(board);
@@ -80,20 +82,38 @@ void puttingInput(char board[3][3], int index, char token){
     }
 }
 
+void gameOverText(int number){
+    if(number == 0){
+        printf("Player 1 won\n"); 
+    }else if(number == 1){
+        printf("Player 2 won\n");
+    }else if(number == 2){
+        printf("Player won\n");
+    }else if(number == 3){
+        printf("AI1 won\n");
+    }else if(number == 4){
+        printf("AI2 won\n");
+    }else if(number == 5){
+        printf("AI3 won\n");
+    }else if(number== 6){
+        printf("No one won. It is a draw.\n");
+    }
+}
+
 int gameOver(char board[3][3], char token1, char token2){
     int flag = 0;
     // Row-wise check
     for(int i = 0; i < 3; i++){
         if(board[i][0]!=' ' && board[i][0]==board[i][1] && board[i][1]==board[i][2]){
             flag = WIN;
-            if(flag){
-                if(board[i][0] == token1){
-                    printf("Player 1 won\n");
-                }
-                else{
-                    printf("Player 2 won\n");
-                }
-            }
+            // if(flag){
+            //     if(board[i][0] == token1){
+            //         gameOverText(0);
+            //     }
+            //     else{
+            //         gameOverText(1);
+            //     }
+            // }
             break;
         }
     }
@@ -101,14 +121,14 @@ int gameOver(char board[3][3], char token1, char token2){
     for(int j = 0; j < 3; j++){
         if(board[0][j]!=' ' && board[0][j]==board[1][j] && board[1][j]==board[2][j]){
             flag = WIN;
-            if(flag){
-                if(board[0][j] == token1){
-                    printf("Player 1 won\n");
-                }
-                else{
-                    printf("Player 2 won\n");
-                }
-            }
+            // if(flag){
+            //     if(board[0][j] == token1){
+            //         printf("Player 1 won\n");
+            //     }
+            //     else{
+            //         printf("Player 2 won\n");
+            //     }
+            // }
             break;
         }
     }
@@ -116,26 +136,26 @@ int gameOver(char board[3][3], char token1, char token2){
     // Leading diagonal check
     if(board[0][0]!=' ' && board[0][0]==board[1][1] && board[1][1]==board[2][2]){
         flag = WIN;
-        if(flag){
-            if(board[0][0] == token1){
-                printf("Player 1 won\n");
-            }
-            else{
-                printf("Player 2 won\n");
-            }
-        }
+        // if(flag){
+        //     if(board[0][0] == token1){
+        //         printf("Player 1 won\n");
+        //     }
+        //     else{
+        //         printf("Player 2 won\n");
+        //     }
+        // }
     }
     // Lagging diagonal check
     if(board[0][2]!=' ' && board[0][2]==board[1][1] && board[1][1]==board[2][0]){
         flag = WIN;
-        if(flag){
-            if(board[0][0] == token1){
-                printf("Player 1 won\n");
-            }
-            else{
-                printf("Player 2 won\n");
-            }
-        }
+        // if(flag){
+        //     if(board[0][0] == token1){
+        //         printf("Player 1 won\n");
+        //     }
+        //     else{
+        //         printf("Player 2 won\n");
+        //     }
+        // }
     } 
 
     int count = 0;
@@ -148,7 +168,6 @@ int gameOver(char board[3][3], char token1, char token2){
     }
     if(count == 9 && !flag){
         flag = DRAW;
-        printf("No one won. It is a draw.\n");
     }
 
     return flag;
@@ -165,7 +184,11 @@ void playerVsPlayer(char board[3][3]){
         }while(!validMoveInput(board,index1));
         puttingInput(board, index1, token1);
         showBoard(board);
-        if(gameOver(board, token1, token2)){
+        if(gameOver(board, token1, token2)==WIN){
+            gameOverText(0);
+            break;
+        }else if(gameOver(board, token1, token2)==DRAW){
+            gameOverText(6);
             break;
         }
         
@@ -176,7 +199,11 @@ void playerVsPlayer(char board[3][3]){
         puttingInput(board, index2, token2);
         showBoard(board);
 
-        if(gameOver(board, token1, token2)){
+        if(gameOver(board, token1, token2)==WIN){
+            gameOverText(1);
+            break;
+        }else if(gameOver(board, token1, token2)==DRAW){
+            gameOverText(6);
             break;
         }
     } 
@@ -193,7 +220,11 @@ void playerVsAI1(char board[3][3]){
         }while(!validMoveInput(board,index1));
         puttingInput(board, index1, token1);
         showBoard(board);
-        if(gameOver(board, token1, token2)){
+        if(gameOver(board, token1, token2)==WIN){
+            gameOverText(2);
+            break;
+        }else if(gameOver(board, token1, token2)==DRAW){
+            gameOverText(6);
             break;
         }
         
@@ -204,14 +235,89 @@ void playerVsAI1(char board[3][3]){
         puttingInput(board, index2, token2);
         showBoard(board);
 
-        if(gameOver(board, token1, token2)){
+        if(gameOver(board, token1, token2)==WIN){
+            gameOverText(3);
+            break;
+        }else if(gameOver(board, token1, token2)==DRAW){
+            gameOverText(6);
             break;
         }
     } 
 }
 
 void playerVsAI2(char board[3][3]){
+    while(1){
+        char token1 = 'X';
+        char token2 = 'O';
+
+        int index1;
+        do{
+            index1 = playerMove();
+        }while(!validMoveInput(board,index1));
+        puttingInput(board, index1, token1);
+        showBoard(board);
+        if(gameOver(board, token1, token2)==WIN){
+            gameOverText(2);
+            break;
+        }
+        else if(gameOver(board, token1, token2)==DRAW){
+            gameOverText(6);
+            break;
+        }
+        
+        int index2;
+        int caseTrue = 0;
+
+        if(!caseTrue){
+            for(index2=0;index2<9;index2++){
+                if(validMoveInput(board, index2)){
+                    board[index2/3][index2%3]=token2;
+                    if(gameOver(board, token1, token2)==WIN){
+                        showBoard(board);
+                        caseTrue = 1;
+                        break;
+                    }
+                    else{
+                        board[index2/3][index2%3]=' ';
+                    }
+                }
+            }  
+        }      
+
+        if(!caseTrue){
+            for(index2=0;index2<9;index2++){
+                if(validMoveInput(board, index2)){
+                    board[index2/3][index2%3]=token1;
+                    if(gameOver(board, token1, token2)==WIN){
+                        board[index2/3][index2%3]=token2;
+                        showBoard(board);
+                        caseTrue = 1;
+                        break;
+                    }
+                    else{
+                        board[index2/3][index2%3]=' ';
+                    }
+                }
+            } 
+        }
+
+        if(!caseTrue){
+            do{
+                index2 = rand() % 9;
+            }while(!validMoveInput(board,index2));
+            puttingInput(board, index2, token2);
+            showBoard(board);
+        }
+
+        if(gameOver(board, token1, token2)==WIN){
+            gameOverText(4);
+            break;
+        }else if(gameOver(board, token1, token2)==DRAW){
+            gameOverText(6);
+            break;
+        }
     
+    } 
 }
 
 void playerVsAI3(char board[3][3]){
