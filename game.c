@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include "board.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define WIN 1
 #define DRAW 2
@@ -321,5 +322,85 @@ void playerVsAI2(char board[3][3]){
 }
 
 void playerVsAI3(char board[3][3]){
-    
+    int index1;
+    int index2;
+    char token1='X';
+    char token2='O';
+    bool firstMove=true;    
+    while(1){
+        if(firstMove){
+            index2=4%9;
+            puttingInput(board,index2,token2);
+            showBoard(board);
+            firstMove=false;
+        }
+        else{
+            int caseTrue=0;
+                if(!caseTrue){
+                    for(index2=0;index2<9;index2++){
+                    //1st case
+                        if(validMoveInput(board,index2)){
+                            board[index2/3][index2%3]=token2;
+                            if(gameOver(board,token1,token2)==1){
+                                showBoard(board);
+                                caseTrue=1;
+                                break;
+                            }
+                            else{
+                                board[index2/3][index2%3]=' ';
+                            }
+                        }  
+                    }
+                }
+                if(!caseTrue){
+                    for(index2=0;index2<9;index2++){
+                        //2nd case
+                        if(validMoveInput(board,index2)){
+                            board[index2/3][index2%3]=token1;
+                            if(gameOver(board,token1,token2)==1){
+                                board[index2/3][index2%3]=token2;
+                                showBoard(board);
+                                caseTrue=1;
+                                break;
+                            }
+                        
+                            else{
+                                board[index2/3][index2%3]=' ';
+                            }
+                        }
+                    }
+                }
+                //3rd case
+                if(!caseTrue){
+                    do{
+                        index2=rand()%9;
+                    }while(!validMoveInput(board,index2));
+
+                    puttingInput(board,index2,token2);
+                    showBoard(board);
+                }
+                
+                //winner declare
+                if(gameOver(board,token1,token2)==WIN){
+                    gameOverText(5);
+                    break;
+                }else if(gameOver(board,token1,token2)==DRAW){
+                    gameOverText(6);
+                    break;
+                }
+            }
+        do{
+            index1=playerMove();
+        }while(!validMoveInput(board,index1));
+            
+        puttingInput(board,index1,token1);
+        showBoard(board);
+        if(gameOver(board,token1,token2)==WIN){
+            gameOverText(2);
+            break;
+        }
+        else if(gameOver(board,token1,token2)==DRAW){
+            gameOverText(6);
+        }
+    }
 }
