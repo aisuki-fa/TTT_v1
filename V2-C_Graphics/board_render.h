@@ -1,5 +1,5 @@
 #include "TTT.h"
 
 void drawGrid();
-void drawToken();
+void drawToken(int index, char token);
 void drawBoard(char board[3][3]);

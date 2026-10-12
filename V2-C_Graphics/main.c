@@ -39,7 +39,8 @@ int main(){
     while(!WindowShouldClose()){
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("TIC-TAC-TOE game is running, ugh nvm",100,200,30,DARKBLUE);
+        DrawText("TIC-TAC-TOE game is running, ugh nvm",50,20,40,DARKBLUE);
+        drawToken(0,'O');
         drawGrid();
         EndDrawing();
     }
